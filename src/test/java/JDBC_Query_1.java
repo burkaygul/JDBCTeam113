@@ -1,22 +1,47 @@
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class JDBC_Query_1 {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
         // 1 Kullanilacak veritabani icin dogru surucuyu ekle
 
-        try {
+
             Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-        }
 
-        try {
-            DriverManager.getConnection("jdbc:mysql://localhost:3306/sys?serverTimezone=UTC", "root", "1234");
-        } catch (SQLException e) {
 
-        }
+
+        // 2 Database baglantisi kurulur
+       /*
+        URL: "jdbc:mysql://194.140.198.209/heallife_hospitaltraining";
+        USERNAME= "heallife_hospitaltraininguser";
+        PASSWORD="PI2ZJx@9m^)3";
+        */
+
+
+            Connection con = DriverManager.getConnection("jdbc:mysql://194.140.198.209/heallife_hospitaltraining",
+                                                        "heallife_hospitaltraininguser",
+                                                        "PI2ZJx@9m^)3");
+
+
+        // olusturulan connection bir objeye atanmasa da calisir
+        // ancak ilerde ilgili connection'i kullanmak istersek ona ulasamayiz
+        // o yuzden onu Connection nesnesine atama yapariz.
+
+
+        // 3- SQL sorgularini yapabilmek icin suite hazirla
+
+        Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+
+        // 4- SQL sorgularini hazirla ve calisir
+
+        String query = "SELECT * FROM heallife_hospitaltraining.staff";
+        ResultSet rs = st.executeQuery(query);
+
+        rs.next();
+        System.out.println(rs.getString("name"));
+
+    }
 
 
         /*
@@ -29,4 +54,3 @@ public class JDBC_Query_1 {
          */
     }
 
-}
